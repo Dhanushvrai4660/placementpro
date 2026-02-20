@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <h2 class="fw-bold text-white mb-4">TPO Dashboard</h2>
 
 <div class="row g-3 mb-4">
@@ -65,11 +66,38 @@
             </li>
           {% empty %}
             <li class="list-group-item px-0 text-muted">No eligible students yet.</li>
+
+<h2>TPO Dashboard</h2>
+<div class="row">
+  <div class="col-md-4">
+    <div class="card p-3 mb-3">
+      <h5>Create Drive</h5>
+      <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Save Drive</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-8">
+    {% for drive, students in eligibility_map %}
+      <div class="card p-3 mb-3">
+        <h5>{{ drive.company_name }} ({{ drive.drive_date }})</h5>
+        <p>Eligible Students:</p>
+        <ul>
+          {% for s in students %}
+            <li>{{ s.user.username }} | CGPA: {{ s.cgpa }} | Branch: {{ s.branch }} | Backlogs: {{ s.backlogs }}</li>
+          {% empty %}
+            <li>No eligible students yet.</li>
+
           {% endfor %}
         </ul>
       </div>
     {% empty %}
+
       <div class="card"><p class="mb-0 text-muted">No drives created yet.</p></div>
+
+      <p>No drives created yet.</p>
+ 
     {% endfor %}
   </div>
 </div>

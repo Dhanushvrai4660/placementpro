@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 220px);">
   <div class="col-12 col-md-7 col-lg-5">
     <div class="card border-0" style="background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 20px 45px rgba(0,0,0,0.28); color: #fff;">
@@ -15,6 +16,16 @@
         </div>
       </form>
     </div>
+
+<div class="row justify-content-center">
+  <div class="col-md-5 card p-4">
+    <h3>Login</h3>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Login</button>
+      <a class="btn btn-link" href="{% url 'accounts:register' %}">Create account</a>
+    </form>
+
   </div>
 </div>
 {% endblock %}

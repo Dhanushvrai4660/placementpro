@@ -1,5 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<h2 class="fw-bold text-white mb-4">Student Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card summary-card h-100">
+      <div class="summary-icon"><i class="bi bi-briefcase-fill"></i></div>
+      <div>
+        <div class="summary-value">{{ applications|length }}</div>
+        <div class="summary-label">Total Applications</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card summary-card h-100">
+      <div class="summary-icon"><i class="bi bi-building-fill"></i></div>
+      <div>
+        <div class="summary-value">{{ eligible_drives|length }}</div>
+        <div class="summary-label">Eligible Drives</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <h5 class="fw-semibold mb-3">Profile Details</h5>
+      <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-gradient" type="submit"><i class="bi bi-check2-circle me-1"></i>Save Profile</button>
+      </form>
+      <a class="btn btn-outline-primary btn-outline-soft mt-3" href="{% url 'students:resume_pdf' %}">
+        <i class="bi bi-download me-1"></i>Download Resume PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card mb-3">
+      <h5 class="fw-semibold mb-3">Eligible Drives</h5>
+      <ul class="list-group list-group-flush">
+        {% for drive in eligible_drives %}
+          <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ drive.company_name }}</strong>
+              <div class="small text-muted">Drive Date: {{ drive.drive_date }}</div>
+            </div>
+            <a class="btn btn-sm btn-gradient" href="{% url 'applications:apply_drive' drive.id %}">Apply</a>
+          </li>
+        {% empty %}
+          <li class="list-group-item px-0 text-muted">No eligible drives yet.</li>
+
 <h2>Student Dashboard</h2>
 <div class="row">
   <div class="col-md-5">
@@ -23,9 +76,22 @@
           </li>
         {% empty %}
           <li class="list-group-item">No eligible drives yet.</li>
+
         {% endfor %}
       </ul>
     </div>
+
+
+    <div class="card">
+      <h5 class="fw-semibold mb-3">Application Status Tracker</h5>
+      <ul class="list-group list-group-flush">
+        {% for application in applications %}
+          <li class="list-group-item px-0 d-flex justify-content-between">
+            <span>{{ application.drive.company_name }}</span>
+            <strong>{{ application.get_status_display }}</strong>
+          </li>
+        {% empty %}
+          <li class="list-group-item px-0 text-muted">No applications submitted.</li>
 
     <div class="card p-3">
       <h5>Application Status Tracker</h5>
@@ -36,6 +102,7 @@
           </li>
         {% empty %}
           <li class="list-group-item">No applications submitted.</li>
+
         {% endfor %}
       </ul>
     </div>

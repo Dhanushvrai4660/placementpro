@@ -5,6 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PlacementPro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+      :root {
+        --brand-start: #1a2a6c;
+        --brand-end: #6a11cb;
+        --brand-accent: #2575fc;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--brand-start), #3f2b96 55%, var(--brand-end));
+        color: #f5f7ff;
+      }
+      .navbar {
+        backdrop-filter: blur(10px);
+        background: rgba(17, 24, 39, 0.68) !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+      }
+      .navbar-brand {
+        letter-spacing: 0.3px;
+        font-weight: 700;
+      }
+      .surface-card,
+      .card {
+        border: 0;
+        border-radius: 16px;
+        background: #ffffff;
+        color: #1f2937;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+        padding: 20px;
+      }
+      .btn-gradient {
+        border: 0;
+        border-radius: 12px;
+        padding: 0.55rem 1.1rem;
+        color: #fff;
+        background-image: linear-gradient(135deg, var(--brand-accent), var(--brand-end));
+        box-shadow: 0 8px 20px rgba(63, 81, 181, 0.35);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      }
+      .btn-gradient:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(63, 81, 181, 0.42);
+        filter: brightness(1.05);
+      }
+      .btn-outline-soft {
+        border-radius: 12px;
+      }
+      .form-control,
+      .form-select,
+      input,
+      textarea,
+      select {
+        border-radius: 12px !important;
+        border: 1px solid #dbe2f1;
+        padding: 0.65rem 0.8rem;
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: #8db1ff !important;
+        outline: 0;
+        box-shadow: 0 0 0 0.18rem rgba(37, 117, 252, 0.2);
+      }
+      .summary-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .summary-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: #fff;
+        background: linear-gradient(135deg, #2575fc, #6a11cb);
+        flex-shrink: 0;
+      }
+      .summary-value {
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .summary-label {
+        font-size: 0.9rem;
+        color: #6b7280;
+      }
+      .text-muted-soft {
+        color: #94a3b8 !important;
+      }
+      footer {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+      <div class="container py-1">
+        <a class="navbar-brand" href="#"><i class="bi bi-stars me-2"></i>PlacementPro</a>
+        <div class="navbar-nav ms-auto align-items-lg-center gap-2">
+          {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'alumni:referrals_feed' %}"><i class="bi bi-megaphone me-1"></i>Referrals</a>
+          <a class="btn btn-sm btn-gradient" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
+          {% else %}
+          <a class="btn btn-sm btn-gradient" href="{% url 'accounts:login' %}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a>
+
   </head>
   <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
@@ -14,10 +129,25 @@
           {% if user.is_authenticated %}
           <a class="nav-link" href="{% url 'alumni:referrals_feed' %}">Referrals</a>
           <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+
           {% endif %}
         </div>
       </div>
     </nav>
+
+
+    <main class="container pb-4">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info shadow-sm border-0">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center py-3">
+      <small>© 2026 PlacementPro | Built for Codethon</small>
+    </footer>
 
     <div class="container">
       {% if messages %}
@@ -27,5 +157,6 @@
       {% endif %}
       {% block content %}{% endblock %}
     </div>
+
   </body>
 </html>

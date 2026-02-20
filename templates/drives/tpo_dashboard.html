@@ -1,5 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<h2 class="fw-bold text-white mb-4">TPO Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card summary-card h-100">
+      <div class="summary-icon"><i class="bi bi-building"></i></div>
+      <div>
+        <div class="summary-value">{{ eligibility_map|length }}</div>
+        <div class="summary-label">Total Drives</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card summary-card h-100">
+      <div class="summary-icon"><i class="bi bi-people-fill"></i></div>
+      <div>
+        <div class="summary-value">
+          {% if eligibility_map %}
+            {{ eligibility_map.0.1|length }}
+          {% else %}
+            0
+          {% endif %}
+        </div>
+        <div class="summary-label">Eligible in Latest Drive</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card summary-card h-100">
+      <div class="summary-icon"><i class="bi bi-calendar-event-fill"></i></div>
+      <div>
+        <div class="summary-value">{{ eligibility_map|length }}</div>
+        <div class="summary-label">Open Recruitment Cycles</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card">
+      <h5 class="fw-semibold mb-3">Create Drive</h5>
+      <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-gradient w-100" type="submit"><i class="bi bi-plus-circle me-1"></i>Create Drive</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    {% for drive, students in eligibility_map %}
+      <div class="card mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="fw-semibold mb-0">{{ drive.company_name }}</h5>
+          <span class="badge text-bg-primary">{{ drive.drive_date }}</span>
+        </div>
+        <p class="small text-muted mb-2">Eligible Students</p>
+        <ul class="list-group list-group-flush">
+          {% for s in students %}
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-person-badge me-2 text-primary"></i>{{ s.user.username }}</span>
+              <small class="text-muted">CGPA {{ s.cgpa }} · {{ s.branch }} · Backlogs {{ s.backlogs }}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item px-0 text-muted">No eligible students yet.</li>
+
 <h2>TPO Dashboard</h2>
 <div class="row">
   <div class="col-md-4">
@@ -21,11 +88,16 @@
             <li>{{ s.user.username }} | CGPA: {{ s.cgpa }} | Branch: {{ s.branch }} | Backlogs: {{ s.backlogs }}</li>
           {% empty %}
             <li>No eligible students yet.</li>
+
           {% endfor %}
         </ul>
       </div>
     {% empty %}
+
+      <div class="card"><p class="mb-0 text-muted">No drives created yet.</p></div>
+
       <p>No drives created yet.</p>
+ 
     {% endfor %}
   </div>
 </div>
